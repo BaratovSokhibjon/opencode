@@ -1,0 +1,34 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "instructions": [
+        "CONTRIBUTING.md",
+        "docs/guidelines.md"
+    ],
+    "formatter": {
+        "prettier": {
+            "command": [
+                "npx",
+                "prettier",
+                "--write",
+                "$FILE"
+            ],
+            "environment": {
+                "NODE_ENV": "development"
+            }
+        }
+    },
+    "permission": {
+        "read": "allow",
+        "grep": "allow",
+        "glob": "allow",
+        "list": "allow",
+        "lsp": "allow",
+        "bash": "ask",
+        "question": "allow",
+        "todowrite": "allow",
+        "webfetch": "allow",
+        "skill": {
+            "*": "allow"
+        }
+    }
+}
