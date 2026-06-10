@@ -58,11 +58,7 @@ The `docker` skill encodes the required Dockerfile conventions — `# syntax` di
 ## Requirements
 
 - [OpenCode](https://opencode.ai): `npm install -g opencode-ai`
-- A model configured in OpenCode. The pack is **provider-agnostic** — it pins no model, so every agent and command uses your configured default (Anthropic, OpenAI, any provider). Set one by running `opencode` and picking a model, or add a top-level default to the installed `opencode.json`:
-
-  ```json
-  { "model": "anthropic/claude-sonnet-4-6" }
-  ```
+- A model configured in OpenCode. The pack is **provider-agnostic** — it pins no model, so every agent and command uses your configured default (Anthropic, OpenAI, any provider). Set one by running `opencode` and picking a model.
 
 ## Environment & MCP servers
 
