@@ -1,74 +1,52 @@
 #!/usr/bin/env bash
-# Install one profile of the HumbleBee AI OpenCode workflow pack into a project.
+# Install one profile of the HumbleBee OpenCode workflow pack into the current project.
 #
-# Usage:
-#   ./install.sh <profile> [target_dir]
+#   curl -fsSL https://raw.githubusercontent.com/humblebeeai/opencode/main/install.sh | bash -s -- <profile>
 #
-#   <profile>     frontend | backend | infra | fullstack
-#   [target_dir]  project to install into (default: current directory)
+#   <profile>  frontend | backend | infra | fullstack | fastapi | nextjs | python-sdk | docs | docker
+#              (default: fullstack)
 #
-# Copies the profile's .opencode/, opencode.json, AGENTS.md, .env.example,
-# and .ignore into the target. Existing .opencode/ is backed up; existing
-# opencode.json / AGENTS.md are never clobbered.
-set -e
+# Fetches only the chosen profile and drops its .opencode/, opencode.json, AGENTS.md,
+# .env.example, and .ignore into the current directory. Downloads to a temp dir that is
+# always cleaned up — no clone and no installer artifacts are left behind.
+set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROFILES_DIR="$ROOT/profiles"
-PROFILE="${1:-}"
-TARGET_DIR="${2:-$(pwd)}"
+REPO="${OPENCODE_PACK_REPO:-humblebeeai/opencode}"
+REF="${OPENCODE_PACK_REF:-main}"
+PROFILE="${1:-${OPENCODE_PACK_PROFILE:-fullstack}}"
+TARGET_DIR="${OPENCODE_PACK_TARGET:-$PWD}"
+URL="${OPENCODE_PACK_URL:-https://codeload.github.com/${REPO}/tar.gz/${REF}}"
 
-available() { ls "$PROFILES_DIR" 2>/dev/null | tr '\n' ' '; }
+command -v curl >/dev/null 2>&1 || { echo "error: curl is required" >&2; exit 1; }
+command -v tar  >/dev/null 2>&1 || { echo "error: tar is required"  >&2; exit 1; }
 
-if [ -z "$PROFILE" ]; then
-  echo "Usage: ./install.sh <profile> [target_dir]"
-  echo "Profiles: $(available)"
-  exit 1
-fi
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT  # always clean up — no artifacts, even on failure
 
-SRC="$PROFILES_DIR/$PROFILE"
+echo "Fetching OpenCode pack (${REPO}@${REF})…" >&2
+curl -fsSL "$URL" | tar -xz -C "$TMP"
+
+SRC_ROOT="$(dirname "$(find "$TMP" -maxdepth 2 -type d -name profiles | head -1)")"
+SRC="$SRC_ROOT/profiles/$PROFILE"
 if [ ! -d "$SRC" ]; then
-  echo "Error: unknown profile '$PROFILE'. Available: $(available)"
+  echo "error: unknown profile '$PROFILE'. Available: $(ls "$SRC_ROOT/profiles" | tr '\n' ' ')" >&2
   exit 1
 fi
 
-if [ ! -d "$TARGET_DIR" ]; then
-  echo "Error: target directory does not exist: $TARGET_DIR"
-  exit 1
-fi
-
-if [ "$TARGET_DIR" -ef "$ROOT" ]; then
-  echo "Error: cannot install into the pack repo itself"
-  exit 1
-fi
-
-# Back up an existing .opencode before replacing it.
+# Replace .opencode/, backing up any existing one.
 if [ -d "$TARGET_DIR/.opencode" ]; then
   BACKUP="$TARGET_DIR/.opencode.backup.$(date +%Y%m%d%H%M%S)"
-  echo "Existing .opencode found — backing up to $(basename "$BACKUP")"
+  echo "Existing .opencode found — backing up to $(basename "$BACKUP")" >&2
   mv "$TARGET_DIR/.opencode" "$BACKUP"
 fi
 cp -R "$SRC/.opencode" "$TARGET_DIR/.opencode"
-echo "Installed '$PROFILE' profile .opencode/ into $TARGET_DIR"
 
-# Config and docs — never clobber.
-if [ ! -f "$TARGET_DIR/opencode.json" ]; then
-  cp "$SRC/opencode.json" "$TARGET_DIR/opencode.json"
-  echo "Added opencode.json"
-else
-  echo "Existing opencode.json kept"
-fi
+# Config and docs — never clobber what the project already has.
+[ -f "$TARGET_DIR/opencode.json" ] || cp "$SRC/opencode.json"  "$TARGET_DIR/opencode.json"
+[ -f "$TARGET_DIR/AGENTS.md" ]     || cp "$SRC/AGENTS.md"      "$TARGET_DIR/AGENTS.md"
+[ -f "$TARGET_DIR/.env.example" ]  || cp "$SRC/.env.example"   "$TARGET_DIR/.env.example"
+[ -f "$TARGET_DIR/.ignore" ]       || cp "$SRC/.ignore"        "$TARGET_DIR/.ignore"
 
-if [ ! -f "$TARGET_DIR/AGENTS.md" ]; then
-  cp "$SRC/AGENTS.md" "$TARGET_DIR/AGENTS.md"
-  echo "Added AGENTS.md"
-else
-  echo "Existing AGENTS.md kept"
-fi
-
-[ -f "$TARGET_DIR/.env.example" ] || { cp "$SRC/.env.example" "$TARGET_DIR/.env.example"; echo "Added .env.example"; }
-[ -f "$TARGET_DIR/.ignore" ]      || { cp "$SRC/.ignore" "$TARGET_DIR/.ignore"; echo "Added .ignore"; }
-
-echo ""
-echo "Profile '$PROFILE' installed."
-echo "Commands: $(ls "$SRC/.opencode/commands" | sed 's/.md$//' | tr '\n' ' ')"
-echo "Run 'cp .env.example .env' if you need MCP credentials, then 'opencode'."
+echo "Installed '$PROFILE' profile into $TARGET_DIR" >&2
+echo "Commands: $(ls "$SRC/.opencode/commands" | sed 's/\.md$//' | tr '\n' ' ')" >&2
+echo "Next: run 'opencode' here (copy .env.example to .env if you enable credentialed MCPs)." >&2
