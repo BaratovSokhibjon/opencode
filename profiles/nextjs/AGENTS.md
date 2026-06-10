@@ -25,7 +25,7 @@ Slash commands available in this profile:
 - `architect` — Plans larger changes, decomposes systems, identifies tradeoffs, and produces implementation-ready designs.
 - `commit` — Analyzes changes, groups them by feature, stages granularly, and creates semantic commits following company conventions
 - `docs` — Updates docs, READMEs, runbooks, changelogs, and MkDocs knowledge-base pages using project conventions.
-- `frontend/frontend` — Implements UI, state, forms, accessibility, security, and frontend API integration work.
+- `frontend` — Implements UI, state, forms, accessibility, security, and frontend API integration work.
 - `refactor` — Analyzes and refactors code to follow Google style guides, company conventions, and improve maintainability
 - `review` — Reviews recent code changes and produces a structured feedback report with PR and security checklists
 - `tester` — Runs tests, analyzes failures, verifies fixes, and reports focused reproduction steps.

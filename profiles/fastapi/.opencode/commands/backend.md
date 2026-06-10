@@ -1,6 +1,6 @@
 ---
 description: Backend API, service, database, auth, validation, logging, and integration work.
-agent: backend/backend
+agent: backend
 ---
 
 Load the backend and testing skills when relevant. Work on this backend request: $ARGUMENTS

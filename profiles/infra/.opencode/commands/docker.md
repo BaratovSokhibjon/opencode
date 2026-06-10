@@ -1,6 +1,6 @@
 ---
 description: Dockerfile, image build, caching, runtime safety, and GCR/Artifact Registry work.
-agent: infra/docker
+agent: docker
 ---
 
 Load docker and security guidance. Work on this Docker request: $ARGUMENTS

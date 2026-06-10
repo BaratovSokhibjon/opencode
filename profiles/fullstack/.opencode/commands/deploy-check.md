@@ -1,6 +1,6 @@
 ---
 description: Production deployment readiness review — env, health, registry, server naming, rollback, and CI/CD gates.
-agent: infra/deployment
+agent: deployment
 subtask: true
 ---
 

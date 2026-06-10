@@ -1,6 +1,6 @@
 ---
 description: GitHub Actions CI/CD, SemVer releases, permissions, caching, and deploy gates.
-agent: infra/github-actions
+agent: github-actions
 ---
 
 Load GitHub Actions and security guidance. Work on this workflow request: $ARGUMENTS

@@ -22,8 +22,8 @@ Slash commands available in this profile:
 
 - `architect` — Plans larger changes, decomposes systems, identifies tradeoffs, and produces implementation-ready designs.
 - `commit` — Analyzes changes, groups them by feature, stages granularly, and creates semantic commits following company conventions
-- `infra/compose` — Implements Docker Compose services, networks, volumes, env wiring, healthchecks, and override patterns.
-- `infra/docker` — Implements Dockerfile, image build, runtime user, caching, container safety, and GCR/Artifact Registry work.
+- `compose` — Implements Docker Compose services, networks, volumes, env wiring, healthchecks, and override patterns.
+- `docker` — Implements Dockerfile, image build, runtime user, caching, container safety, and GCR/Artifact Registry work.
 - `review` — Reviews recent code changes and produces a structured feedback report with PR and security checklists
 
 **Subagents** (read-only analysis):

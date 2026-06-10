@@ -1,6 +1,6 @@
 ---
 description: Frontend UI, state, forms, accessibility, security, and API integration work.
-agent: frontend/frontend
+agent: frontend
 ---
 
 Load the frontend and testing skills when relevant. Work on this frontend request: $ARGUMENTS

@@ -1,6 +1,6 @@
 ---
 description: Deployment implementation and readiness fixes — registry, server context, rollback, and post-deploy verification.
-agent: infra/deployment
+agent: deployment
 ---
 
 Load deployment, security, and testing guidance. Work on this deployment request: $ARGUMENTS

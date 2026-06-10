@@ -1,6 +1,6 @@
 ---
 description: Security review or remediation for code, config, Docker, CI/CD, auth, input validation, and secrets.
-agent: security/security
+agent: security
 subtask: true
 ---
 

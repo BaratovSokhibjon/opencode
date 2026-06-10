@@ -1,6 +1,6 @@
 ---
 description: Nginx routing, reverse proxy, TLS, security headers, caching, and upstreams.
-agent: infra/nginx
+agent: nginx
 ---
 
 Load Nginx and security guidance. Work on this Nginx request: $ARGUMENTS

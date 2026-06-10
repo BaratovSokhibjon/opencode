@@ -31,14 +31,14 @@ Slash commands available in this profile:
 - `architect` — Plans larger changes, decomposes systems, identifies tradeoffs, and produces implementation-ready designs.
 - `commit` — Analyzes changes, groups them by feature, stages granularly, and creates semantic commits following company conventions
 - `docs` — Updates docs, READMEs, runbooks, changelogs, and MkDocs knowledge-base pages using project conventions.
-- `infra/compose` — Implements Docker Compose services, networks, volumes, env wiring, healthchecks, and override patterns.
-- `infra/deployment` — Checks and implements deployment readiness, registry, server context, rollback, monitoring, and post-deploy verification.
-- `infra/docker` — Implements Dockerfile, image build, runtime user, caching, container safety, and GCR/Artifact Registry work.
-- `infra/github-actions` — Implements GitHub Actions CI/CD workflows, SemVer releases, permissions, caching, and deploy gates.
-- `infra/nginx` — Implements Nginx routing, reverse proxy, TLS, security headers, static assets, and upstream health behavior.
+- `compose` — Implements Docker Compose services, networks, volumes, env wiring, healthchecks, and override patterns.
+- `deployment` — Checks and implements deployment readiness, registry, server context, rollback, monitoring, and post-deploy verification.
+- `docker` — Implements Dockerfile, image build, runtime user, caching, container safety, and GCR/Artifact Registry work.
+- `github-actions` — Implements GitHub Actions CI/CD workflows, SemVer releases, permissions, caching, and deploy gates.
+- `nginx` — Implements Nginx routing, reverse proxy, TLS, security headers, static assets, and upstream health behavior.
 - `refactor` — Analyzes and refactors code to follow Google style guides, company conventions, and improve maintainability
 - `review` — Reviews recent code changes and produces a structured feedback report with PR and security checklists
-- `security/security` — Reviews and remediates realistic security risks across app code, infrastructure, CI/CD, and docs.
+- `security` — Reviews and remediates realistic security risks across app code, infrastructure, CI/CD, and docs.
 - `tester` — Runs tests, analyzes failures, verifies fixes, and reports focused reproduction steps.
 
 **Subagents** (read-only analysis):

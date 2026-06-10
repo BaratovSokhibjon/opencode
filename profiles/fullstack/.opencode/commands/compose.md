@@ -1,6 +1,6 @@
 ---
 description: Docker Compose services, override patterns, networks, volumes, env vars, and healthchecks.
-agent: infra/compose
+agent: compose
 ---
 
 Load compose and security guidance. Work on this Compose request: $ARGUMENTS

@@ -24,12 +24,12 @@ Slash commands available in this profile:
 **Primary** (do the work):
 
 - `architect` — Plans larger changes, decomposes systems, identifies tradeoffs, and produces implementation-ready designs.
-- `backend/backend` — Implements backend API, service, database, authentication, validation, logging, and integration work.
+- `backend` — Implements backend API, service, database, authentication, validation, logging, and integration work.
 - `commit` — Analyzes changes, groups them by feature, stages granularly, and creates semantic commits following company conventions
 - `docs` — Updates docs, READMEs, runbooks, changelogs, and MkDocs knowledge-base pages using project conventions.
 - `refactor` — Analyzes and refactors code to follow Google style guides, company conventions, and improve maintainability
 - `review` — Reviews recent code changes and produces a structured feedback report with PR and security checklists
-- `security/security` — Reviews and remediates realistic security risks across app code, infrastructure, CI/CD, and docs.
+- `security` — Reviews and remediates realistic security risks across app code, infrastructure, CI/CD, and docs.
 - `tester` — Runs tests, analyzes failures, verifies fixes, and reports focused reproduction steps.
 
 **Subagents** (read-only analysis):

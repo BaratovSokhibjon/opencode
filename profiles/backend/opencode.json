@@ -185,5 +185,5 @@
             "docker volume prune*": "deny"
         }
     },
-    "default_agent": "backend/backend"
+    "default_agent": "backend"
 }
