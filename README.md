@@ -6,9 +6,31 @@
 
 ---
 
+## Install
+
+One command, run **inside the project you want to set up**. It fetches just that profile and leaves no installer artifacts behind:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/humblebeeai/opencode/main/install.sh | bash -s -- <profile>
+```
+
+```bash
+# frontend project
+curl -fsSL https://raw.githubusercontent.com/humblebeeai/opencode/main/install.sh | bash -s -- frontend
+
+# omit the profile for fullstack (everything)
+curl -fsSL https://raw.githubusercontent.com/humblebeeai/opencode/main/install.sh | bash
+```
+
+Profiles: `frontend` `backend` `infra` `fullstack` `fastapi` `nextjs` `python-sdk` `docs` `docker`.
+
+It drops the profile's `.opencode/`, `opencode.json`, `AGENTS.md`, `.env.example`, and `.ignore` into the current directory — backing up an existing `.opencode/` and never clobbering an existing `opencode.json`/`AGENTS.md` — then you run `opencode`. The download goes to a temp dir that's cleaned up on exit, so nothing but the profile is left behind.
+
+Overrides (env vars): `OPENCODE_PACK_REF` (branch/tag, default `main`), `OPENCODE_PACK_TARGET` (default: current dir), `OPENCODE_PACK_PROFILE`.
+
 ## Why profiles
 
-OpenCode discovers every command in `.opencode/commands/` and can't hide them through config. So instead of one bloated setup where a frontend engineer sees Docker, Nginx, and database commands, the pack ships **self-contained profiles** — each its own `.opencode/`, `opencode.json`, and docs. You pick the profile that matches your work and get a lean, focused toolset.
+OpenCode discovers every command in `.opencode/commands/` and can't hide them through config. So instead of one bloated setup where a frontend engineer sees Docker, Nginx, and database commands, the pack ships **self-contained profiles** — each its own `.opencode/`, `opencode.json`, and docs. You install the profile that matches your work and get a lean, focused toolset.
 
 | Profile     | Commands                                                                   | Skills                                   | MCP servers              |
 | ----------- | ------------------------------------------------------------------------- | ---------------------------------------- | ------------------------ |
@@ -23,37 +45,20 @@ Every profile includes the shared core — `architect`, `test`, `review`, `refac
 
 Narrower specializations that layer HumbleBee's framework conventions (as a loadable skill) on top of a domain base. The skills also ship in `fullstack`.
 
-| Profile      | Based on            | Convention skill         | Notes                                                        |
-| ------------ | ------------------- | ------------------------ | ----------------------------------------------------------- |
-| `fastapi`    | backend             | `frameworks/fastapi`     | scaffolds from `rest-fastapi-template` / `-orm-template`     |
-| `nextjs`     | frontend            | `frameworks/nextjs`      | Next.js App Router + shadcn/ui                               |
-| `python-sdk` | backend (lean)      | `frameworks/python-sdk`  | scaffolds from `module-python-template`                      |
-| `docs`       | docs + core         | `frameworks/docs-mkdocs` | scaffolds from `docs-mkdocs-template`                        |
+| Profile      | Based on            | Convention skill          | Notes                                                       |
+| ------------ | ------------------- | ------------------------- | ---------------------------------------------------------- |
+| `fastapi`    | backend             | `frameworks/fastapi`      | scaffolds from `rest-fastapi-template` / `-orm-template`    |
+| `nextjs`     | frontend            | `frameworks/nextjs`       | Next.js App Router + shadcn/ui                              |
+| `python-sdk` | backend (lean)      | `frameworks/python-sdk`   | scaffolds from `module-python-template`                     |
+| `docs`       | docs + core         | `frameworks/docs-mkdocs`  | scaffolds from `docs-mkdocs-template`                       |
 | `docker`     | docker + compose    | `infra/docker` (enriched) | ships `reference.Dockerfile` + `docker-entrypoint.sh`; conventions enforced by the docker-build analyzer |
 
 The `docker` skill encodes the required Dockerfile conventions — `# syntax` directive, version-pinned base, multi-stage builds, BuildKit cache/bind mounts, non-root user (with root→user drop in the entrypoint), and `docker-entrypoint.sh` that `exec`s under `tini`. Compose: `compose.yml` (not `docker-compose.yml`) and no fixed `container_name`.
 
-## Use a profile
-
-**Option A — run it in place:**
-
-```bash
-cd profiles/frontend
-opencode
-```
-
-**Option B — install it into your project:**
-
-```bash
-./install.sh frontend /path/to/your/project
-```
-
-The installer copies the profile's `.opencode/`, `opencode.json`, `AGENTS.md`, `.env.example`, and `.ignore` into the target. It backs up an existing `.opencode/` and never clobbers an existing `opencode.json` or `AGENTS.md`.
-
 ## Requirements
 
 - [OpenCode](https://opencode.ai): `npm install -g opencode-ai`
-- A model configured in OpenCode. The pack is **provider-agnostic** — it pins no model, so every agent and command uses your configured default (Anthropic, OpenAI, any provider). Set one by running `opencode` and picking a model, or add a top-level default to the profile's `opencode.json`:
+- A model configured in OpenCode. The pack is **provider-agnostic** — it pins no model, so every agent and command uses your configured default (Anthropic, OpenAI, any provider). Set one by running `opencode` and picking a model, or add a top-level default to the installed `opencode.json`:
 
   ```json
   { "model": "anthropic/claude-sonnet-4-6" }
@@ -61,8 +66,9 @@ The installer copies the profile's `.opencode/`, `opencode.json`, `AGENTS.md`, `
 
 ## Environment & MCP servers
 
+After installing, from your project root:
+
 ```bash
-cd profiles/<name>
 cp .env.example .env
 ```
 
@@ -76,46 +82,49 @@ cp .env.example .env
 | `github`     | infra, fullstack       | disabled     | `GITHUB_TOKEN`                 |
 | `linear`     | fullstack              | disabled     | Linear OAuth (backs `/linear`) |
 
-Credentialed servers ship disabled so a fresh clone never errors. Flip `"enabled": true` in the profile's `opencode.json` and add the env var to enable one.
+Credentialed servers ship disabled so a fresh install never errors. Flip `"enabled": true` in `opencode.json` and add the env var to enable one.
 
 ## Permissions
 
-`bash` runs under a pattern allow-list (shared across all profiles): read-only inspection, version checks, linters/formatters, and test runners run without a prompt; state-changing git and unrecognized commands prompt; destructive commands (`rm -rf`, `sudo`, `git push --force`, …) are denied. Subagents are fully read-only. Details and the full list are in each profile's `AGENTS.md` and `opencode.json` → `permission.bash`.
+`bash` runs under a pattern allow-list (the same in every profile): read-only inspection, version checks, linters/formatters, and test runners run without a prompt; state-changing git and unrecognized commands prompt; destructive commands (`rm -rf`, `sudo`, `git push --force`, …) are denied. Subagents are fully read-only. Details and the full list are in each profile's `AGENTS.md` and `opencode.json` → `permission.bash`.
 
 ## Customizing & extending
 
-`profiles/fullstack/` is the **source of truth**. The other profiles are generated from it — don't hand-edit them.
+Every profile under `profiles/` is **self-contained and edited directly** — there's no build step. `fullstack` is the complete set; the others are scoped subsets of it.
 
-```bash
-# 1. edit the library: profiles/fullstack/.opencode/ or profiles/fullstack/opencode.json
-# 2. regenerate the scoped profiles:
-./build-profiles.sh
-```
+- **Change a profile** — edit its files under `profiles/<name>/.opencode/`, its `profiles/<name>/opencode.json`, or its `profiles/<name>/AGENTS.md`.
+- **Change something shared** (a core agent, a skill, the bash allow-list) — apply it to each profile that includes it; `fullstack` is the reference for the full set.
+- **Add a profile** — copy the closest existing one and trim it:
 
-**Add a profile** — for a new framework or a finer variant (the `fastapi`, `nextjs`, `python-sdk`, `docs`, and `docker` profiles are built exactly this way): drop a convention skill under `profiles/fullstack/.opencode/skills/frameworks/<name>/`, add a `build_profile` call in `build-profiles.sh` listing the agents, commands, skills, MCP set, and default agent it needs, then re-run. Keeping profiles narrow — by domain or by framework — is the point.
+  ```bash
+  cp -R profiles/backend profiles/fastapi
+  # then trim .opencode/ to what you need, adjust opencode.json (MCPs, default_agent),
+  # and update AGENTS.md to match
+  ```
+
+Keep each profile's `AGENTS.md` command/agent/skill list in sync with the files actually in its `.opencode/`. To try a profile from a clone without installing: `cd profiles/<name> && opencode`.
 
 ## Repo structure
 
 ```
 .
 ├── README.md
-├── install.sh                 # install a profile into a project
-├── build-profiles.sh          # regenerate scoped profiles from fullstack
-└── profiles/
-    ├── fullstack/             # SOURCE OF TRUTH — full library, hand-edited
+├── install.sh                 # the curl-pipe installer
+└── profiles/                  # the deliverable — one self-contained config per profile
+    ├── fullstack/             # the complete set (all commands, agents, skills, MCPs)
     │   ├── .opencode/{agents,commands,skills}/
     │   ├── opencode.json
     │   ├── AGENTS.md
     │   ├── .env.example
     │   └── .ignore
-    ├── frontend/              # generated slice
-    ├── backend/               # generated slice
-    ├── infra/                 # generated slice
-    ├── fastapi/               # generated — backend + FastAPI conventions
-    ├── nextjs/                # generated — frontend + Next.js/shadcn conventions
-    ├── python-sdk/            # generated — Python library + conventions
-    ├── docs/                  # generated — MkDocs documentation
-    └── docker/                # generated — Dockerfile + Compose conventions
+    ├── frontend/              # frontend
+    ├── backend/               # backend
+    ├── infra/                 # docker / compose / nginx / ci / deploy
+    ├── fastapi/               # backend + FastAPI conventions
+    ├── nextjs/                # frontend + Next.js/shadcn conventions
+    ├── python-sdk/            # Python library + conventions
+    ├── docs/                  # MkDocs documentation
+    └── docker/                # Dockerfile + Compose conventions
 ```
 
 ## License
