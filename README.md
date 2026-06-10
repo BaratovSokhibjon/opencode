@@ -72,6 +72,8 @@ After installing, from your project root:
 cp .env.example .env
 ```
 
+If the project already has a `.env` or `.env.example`, the installer doesn't overwrite them — it **appends** this profile's variables under a labeled `# --- opencode pack: <profile> profile ---` block, skipping any key you've already set (so real values in `.env` are never touched).
+
 `context7` (live library docs) is enabled in every profile and needs no credentials. The rest are scoped per profile and only need setup when you use them:
 
 | Server       | In profiles            | Default      | Needs                          |
