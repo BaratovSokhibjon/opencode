@@ -32,26 +32,26 @@ Overrides (env vars): `OPENCODE_PACK_REF` (branch/tag, default `main`), `OPENCOD
 
 OpenCode discovers every command in `.opencode/commands/` and can't hide them through config. So instead of one bloated setup where a frontend engineer sees Docker, Nginx, and database commands, the pack ships **self-contained profiles** — each its own `.opencode/`, `opencode.json`, and docs. You install the profile that matches your work and get a lean, focused toolset.
 
-| Profile     | Commands                                                                   | Skills                                   | MCP servers              |
-| ----------- | ------------------------------------------------------------------------- | ---------------------------------------- | ------------------------ |
-| `frontend`  | architect, frontend, test, review, refactor, commit, docs                 | frontend, testing                        | context7, playwright     |
-| `backend`   | architect, backend, security, test, review, refactor, commit, docs        | backend, security, testing               | context7, postgres       |
-| `infra`     | architect, docker, compose, nginx, github-actions, deploy, deploy-check, security, test, review, refactor, commit, docs | docker, compose, nginx, github-actions, deployment, security, testing | context7, github         |
-| `fullstack` | everything (all 16 commands)                                              | all                                      | context7, playwright, github, postgres, linear |
+| Profile     | Commands                                                                                                                          | Skills                                                                | MCP servers                                    |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------- |
+| `frontend`  | architect, research, frontend, test, review, refactor, commit, docs                                                               | frontend, testing                                                     | context7, playwright                           |
+| `backend`   | architect, research, backend, security, test, review, refactor, commit, docs                                                      | backend, security, testing                                            | context7, postgres                             |
+| `infra`     | architect, research, docker, compose, nginx, github-actions, deploy, deploy-check, security, test, review, refactor, commit, docs | docker, compose, nginx, github-actions, deployment, security, testing | context7, github                               |
+| `fullstack` | everything (all 17 commands)                                                                                                      | all                                                                   | context7, playwright, github, postgres, linear |
 
-Every profile includes the shared core — `architect`, `test`, `review`, `refactor`, `commit`, `docs` — plus the matching read-only analyzer subagents. `security` is in backend/infra/fullstack; `linear` lives only in fullstack.
+Every profile includes the shared core — `architect`, `research`, `test`, `review`, `refactor`, `commit`, `docs` — plus the matching read-only analyzer subagents. `security` is in backend/infra/fullstack; `linear` lives only in fullstack.
 
 ### Framework profiles
 
 Narrower specializations that layer HumbleBee's framework conventions (as a loadable skill) on top of a domain base. The skills also ship in `fullstack`.
 
-| Profile      | Based on            | Convention skill          | Notes                                                       |
-| ------------ | ------------------- | ------------------------- | ---------------------------------------------------------- |
-| `fastapi`    | backend             | `frameworks/fastapi`      | scaffolds from `rest-fastapi-template` / `-orm-template`    |
-| `nextjs`     | frontend            | `frameworks/nextjs`       | Next.js App Router + shadcn/ui                              |
-| `python-sdk` | backend (lean)      | `frameworks/python-sdk`   | scaffolds from `module-python-template`                     |
-| `docs`       | docs + core         | `frameworks/docs-mkdocs`  | scaffolds from `docs-mkdocs-template`                       |
-| `docker`     | docker + compose    | `infra/docker` (enriched) | ships `reference.Dockerfile` + `docker-entrypoint.sh`; conventions enforced by the docker-build analyzer |
+| Profile      | Based on         | Convention skill          | Notes                                                                                                    |
+| ------------ | ---------------- | ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| `fastapi`    | backend          | `frameworks/fastapi`      | scaffolds from `rest-fastapi-template` / `-orm-template`                                                 |
+| `nextjs`     | frontend         | `frameworks/nextjs`       | Next.js App Router + shadcn/ui                                                                           |
+| `python-sdk` | backend (lean)   | `frameworks/python-sdk`   | scaffolds from `module-python-template`                                                                  |
+| `docs`       | docs + core      | `frameworks/docs-mkdocs`  | scaffolds from `docs-mkdocs-template`                                                                    |
+| `docker`     | docker + compose | `infra/docker` (enriched) | ships `reference.Dockerfile` + `docker-entrypoint.sh`; conventions enforced by the docker-build analyzer |
 
 The `docker` skill encodes the required Dockerfile conventions — `# syntax` directive, version-pinned base, multi-stage builds, BuildKit cache/bind mounts, non-root user (with root→user drop in the entrypoint), and `docker-entrypoint.sh` that `exec`s under `tini`. Compose: `compose.yml` (not `docker-compose.yml`) and no fixed `container_name`.
 
@@ -72,13 +72,13 @@ If the project already has a `.env` or `.env.example`, the installer doesn't ove
 
 `context7` (live library docs) is enabled in every profile and needs no credentials. The rest are scoped per profile and only need setup when you use them:
 
-| Server       | In profiles            | Default      | Needs                          |
-| ------------ | ---------------------- | ------------ | ------------------------------ |
-| `context7`   | all                    | **enabled**  | nothing                        |
-| `playwright` | frontend, fullstack    | **enabled**  | nothing (downloads a browser)  |
-| `postgres`   | backend, fullstack     | disabled     | `DATABASE_URL`                 |
-| `github`     | infra, fullstack       | disabled     | `GITHUB_TOKEN`                 |
-| `linear`     | fullstack              | disabled     | Linear OAuth (backs `/linear`) |
+| Server       | In profiles         | Default     | Needs                          |
+| ------------ | ------------------- | ----------- | ------------------------------ |
+| `context7`   | all                 | **enabled** | nothing                        |
+| `playwright` | frontend, fullstack | **enabled** | nothing (downloads a browser)  |
+| `postgres`   | backend, fullstack  | disabled    | `DATABASE_URL`                 |
+| `github`     | infra, fullstack    | disabled    | `GITHUB_TOKEN`                 |
+| `linear`     | fullstack           | disabled    | Linear OAuth (backs `/linear`) |
 
 Credentialed servers ship disabled so a fresh install never errors. Flip `"enabled": true` in `opencode.json` and add the env var to enable one.
 

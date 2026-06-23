@@ -2,28 +2,30 @@
 
 This is the **`python-sdk`** profile of the HumbleBee OpenCode workflow pack. Only the commands, agents, skills, and MCP servers listed below are installed in this profile. The pack works like a small engineering team: primary agents do the work, read-only subagents analyze focused areas, commands are slash-entry points, and skills are reusable checklists agents load on demand.
 
-Typical cycle: **plan → implement → test → review → commit**, using the commands available below.
+Typical cycle: **research → plan → implement → test → review → commit**, using the commands available below.
 
 ## Commands
 
 Slash commands available in this profile:
 
-| Command | Purpose |
-| --- | --- |
-| `/architect` | Architecture design, tradeoff analysis, decomposition, and implementation planning. |
-| `/backend` | Backend API, service, database, auth, validation, logging, and integration work. |
-| `/commit` | Analyze changes, group by concern, and create Conventional Commits with branch convention check. |
-| `/docs` | Documentation updates — MkDocs pages, README, runbooks, changelogs, with company conventions. |
-| `/refactor` | Focused cleanup, dead-code removal, logging fixes, and maintainability refactoring. |
-| `/review` | Structured code review with PR checklist, CRITICAL/WARNING/SUGGESTION/TESTS findings, and verdict. |
-| `/security` | Security review or remediation for code, config, Docker, CI/CD, auth, input validation, and secrets. |
-| `/test` | Run, analyze, or design focused tests — use scripts/test.sh, read failures fully, never skip tests. |
+| Command      | Purpose                                                                                              |
+| ------------ | ---------------------------------------------------------------------------------------------------- |
+| `/architect` | Architecture design, tradeoff analysis, decomposition, and implementation planning.                  |
+| `/research`  | Research external docs, SDKs, APIs, or frameworks before implementation.                             |
+| `/backend`   | Backend API, service, database, auth, validation, logging, and integration work.                     |
+| `/commit`    | Analyze changes, group by concern, and create Conventional Commits with branch convention check.     |
+| `/docs`      | Documentation updates — MkDocs pages, README, runbooks, changelogs, with company conventions.        |
+| `/refactor`  | Focused cleanup, dead-code removal, logging fixes, and maintainability refactoring.                  |
+| `/review`    | Structured code review with PR checklist, CRITICAL/WARNING/SUGGESTION/TESTS findings, and verdict.   |
+| `/security`  | Security review or remediation for code, config, Docker, CI/CD, auth, input validation, and secrets. |
+| `/test`      | Run, analyze, or design focused tests — use scripts/test.sh, read failures fully, never skip tests.  |
 
 ## Agents
 
 **Primary** (do the work):
 
 - `architect` — Plans larger changes, decomposes systems, identifies tradeoffs, and produces implementation-ready designs.
+- `research` — Researches external documentation, SDKs, APIs, and frameworks before implementation; summarizes auth, endpoints, patterns, breaking changes, and recommended approaches with linked sources. Read-only.
 - `backend` — Implements backend API, service, database, authentication, validation, logging, and integration work.
 - `commit` — Analyzes changes, groups them by feature, stages granularly, and creates semantic commits following company conventions
 - `docs` — Updates docs, READMEs, runbooks, changelogs, and MkDocs knowledge-base pages using project conventions.
