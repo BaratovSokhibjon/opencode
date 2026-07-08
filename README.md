@@ -28,6 +28,20 @@ It drops the profile's `.opencode/`, `opencode.json`, `AGENTS.md`, `.env.example
 
 Overrides (env vars): `OPENCODE_PACK_REF` (branch/tag, default `main`), `OPENCODE_PACK_TARGET` (default: current dir), `OPENCODE_PACK_PROFILE`.
 
+## Install via the `skills` CLI
+
+Besides the curl installer above, this pack can be installed with the open [`skills`](https://www.npmjs.com/package/skills) CLI from Vercel Labs — which works from any supported agent (Claude Code, Cursor, Codex, OpenCode, and more), not just OpenCode.
+
+```bash
+# install the setup skill
+npx skills add humblebeeai/opencode
+
+# preview what the repo exposes first
+npx skills add humblebeeai/opencode --list
+```
+
+This installs the `skills` setup skill (see [`skills/skills/SKILL.md`](skills/skills/SKILL.md)), which guides an agent to pick and apply the right profile. Applying a full profile into a project still uses the `install.sh` installer above — this path doesn't replace it.
+
 ## Why profiles
 
 OpenCode discovers every command in `.opencode/commands/` and can't hide them through config. So instead of one bloated setup where a frontend engineer sees Docker, Nginx, and database commands, the pack ships **self-contained profiles** — each its own `.opencode/`, `opencode.json`, and docs. You install the profile that matches your work and get a lean, focused toolset.
